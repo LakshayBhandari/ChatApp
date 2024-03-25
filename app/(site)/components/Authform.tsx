@@ -6,6 +6,8 @@ import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
 import AuthSocialButton from "./AuthSocialButton";
 import { BsGithub, BsGoogle } from "react-icons/bs";
 import axios from "axios";
+import toast from "react-hot-toast";
+import { signIn } from "next-auth/react";
 type Variant = "Login" | "Register";
 const Authform = () => {
   const [variant, setVariant] = useState<Variant>("Login");
@@ -36,15 +38,41 @@ const Authform = () => {
     if (variant === "Register") {
       //AXIOS REGISTER
       axios.post('/api/register',data)
+      .catch(()=> toast.error('Something went wrong!'))
+      .finally(()=>setIsLoading(false))
     }
     if (variant === "Login") {
       //NextAuth SignIn
+      signIn('credentials',{
+        ...data,
+        redirect:false
+      })
+      .then((callback)=>{
+        if(callback?.error){
+          toast.error('InValid Credentials');
+        }
+
+        if(callback?.ok && !callback?.error){
+          toast.success('Logged In!')
+        }
+      })
+      .finally(()=> setIsLoading(false))
     }
   };
 
   const socialAction = (action: string) => {
     setIsLoading(true);
     //Next Auth Social SignIn
+    signIn(action,{redirect:false})
+    .then((callback)=>{
+      if(callback?.error){
+        toast.error('Invalid Credentials');
+      }
+      if(callback?.ok && !callback?.error)
+      {
+        toast.success('Logged In!')
+      }
+    })
   };
   return (
     <div className=" mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -92,7 +120,7 @@ const Authform = () => {
             />
             <AuthSocialButton
               icon={BsGoogle}
-              onClick={() => socialAction("github")}
+              onClick={() => socialAction("google")}
             />
           </div>
         </div>
