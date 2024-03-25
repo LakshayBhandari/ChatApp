@@ -5,6 +5,7 @@ import React, { useCallback, useState } from "react";
 import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
 import AuthSocialButton from "./AuthSocialButton";
 import { BsGithub, BsGoogle } from "react-icons/bs";
+import axios from "axios";
 type Variant = "Login" | "Register";
 const Authform = () => {
   const [variant, setVariant] = useState<Variant>("Login");
@@ -34,6 +35,7 @@ const Authform = () => {
     setIsLoading(true);
     if (variant === "Register") {
       //AXIOS REGISTER
+      axios.post('/api/register',data)
     }
     if (variant === "Login") {
       //NextAuth SignIn
