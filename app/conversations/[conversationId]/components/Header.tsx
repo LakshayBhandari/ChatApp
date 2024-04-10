@@ -10,6 +10,7 @@ import useOtherUser from "@/app/hooks/useOtherUser";
 import useActiveList from "@/app/hooks/useActiveList";
 
 import Avatar from "@/app/components/Avatar";
+import ProfileDrawer from "./ProfileDrawer";
 interface HeaderProps {
   conversation: Conversation & {
     users: User[];
@@ -32,6 +33,11 @@ const Header: React.FC<HeaderProps> = ({ conversation }) => {
 
   return (
     <>
+      <ProfileDrawer
+        data={conversation}
+        isOpen={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+      />
       <div
         className="
         bg-white 
@@ -45,7 +51,9 @@ const Header: React.FC<HeaderProps> = ({ conversation }) => {
         justify-between 
         items-center 
         shadow-sm
-      "><div className="flex gap-3 items-center">
+      "
+      >
+        <div className="flex gap-3 items-center">
           <Link
             href="/conversations"
             className="
@@ -55,7 +63,8 @@ const Header: React.FC<HeaderProps> = ({ conversation }) => {
             hover:text-sky-600 
             transition 
             cursor-pointer
-          ">
+          "
+          >
             <HiChevronLeft size={32} />
           </Link>
           <Avatar user={otherUser} />
