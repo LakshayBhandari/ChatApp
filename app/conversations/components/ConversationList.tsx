@@ -1,5 +1,5 @@
 "use client";
-
+import { User } from "@prisma/client";
 import useConversation from "@/app/hooks/useConversation";
 import { Conversation } from "@prisma/client";
 import { useRouter } from "next/navigation";
@@ -7,23 +7,30 @@ import { useState } from "react";
 import clsx from "clsx";
 import { MdOutlineGroupAdd } from "react-icons/md";
 import ConversationBox from "./ConversationBox";
+import GroupChatModal from "./GroupChatModal";
 interface ConversationListProps {
   initialItems: Conversation[];
-  // users: User[];
-  //  title?: string;
+  users: User[];
+    title?: string;
 }
 const ConversationList: React.FC<ConversationListProps> = ({
   initialItems,
 }) => {
   const [items, setItems] = useState(initialItems);
   const router = useRouter();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { conversationId, isOpen } = useConversation();
 
   return (
+    <>
+    <GroupChatModal
+       users={[]}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     <aside
       className={clsx(
-        `
-  fixed 
+        `fixed 
   inset-y-0 
   pb-20
   lg:pb-0
@@ -41,6 +48,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
         <div className="flex justify-between mb-4 pt-4">
           <div className="text-2xl font-bold text-neutral-800">Messages</div>
           <div
+           onClick={() => setIsModalOpen(true)}
             className="
                 rounded-full 
                 p-2 
@@ -63,6 +71,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
         />
       ))}
     </aside>
+    </>
   );
 };
 
