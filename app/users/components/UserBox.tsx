@@ -1,10 +1,10 @@
-"use client"
 import axios from "axios";
 import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import {  User } from "@prisma/client";
 
 import Avatar from "@/app/components/Avatar";
+import LoadingModal from "@/app/components/LoadingModal";
 
 interface UserBoxProps {
   data: User
@@ -29,7 +29,7 @@ const UserBox: React.FC<UserBoxProps> = ({
   return (
     <>
       {isLoading && (
-       <></>
+        <LoadingModal />
       )}
       <div
         onClick={handleClick}
